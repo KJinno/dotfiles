@@ -7,10 +7,9 @@
 ###################################################################
 
 #####################
-# zplugin
-#export ZPLUG_HOME=/usr/local/opt/zplug
-#source $ZPLUG_HOME/init.zsh
-
+# zplug初期化
+export ZPLUG_HOME=/usr/local/opt/zplug
+source $ZPLUG_HOME/init.zsh
 
 #####################
 # 補完
@@ -20,6 +19,7 @@ autoload -U compinit; compinit
 zstyle ':completion:*:default' menu select=1
 ## 大文字、小文字を区別せず補完
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
 
 #####################
 # オプション
@@ -32,6 +32,22 @@ setopt interactive_comments
 ## 連続した同じコマンドをヒストリに残さない
 setopt hist_ignore_dups
 
+
+#####################
+# プラグイン
+zplug 'zsh-users/zsh-syntax-highlighting'
+zplug 'zsh-users/zsh-completions'
+## 未インストール項目をインストールする
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+## コマンドをリンクして、PATH に追加し、プラグインは読み込む
+zplug load --verbose
+
+
 #####################
 # プロンプト
 #PROMPT="
@@ -40,9 +56,11 @@ setopt hist_ignore_dups
 #PROMPT2="└─ %F{green}%D{%Y-%m-%d %T}%f $ "
 eval "$(starship init zsh)"
 
+
 #####################
 # anyenv設定
 eval "$(anyenv init -)"
+
 
 #####################
 # エイリアス定義
